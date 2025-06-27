@@ -1,0 +1,8 @@
+.detail {
+    width: 100%;
+    height: 384px;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #00C17B;
+}
