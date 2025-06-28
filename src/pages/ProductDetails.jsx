@@ -28,12 +28,8 @@ function ProductDetails() {
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    if (tg && tg.initDataUnsafe?.user?.id) {
-      setUserId(tg.initDataUnsafe.user.id);
-    } else {
-      setUserId('null');
-    }
-    console.log("Telegram user ID:", tg?.initDataUnsafe?.user?.id); // Log Telegram user ID
+    const id = tg?.initDataUnsafe?.user?.id;
+    setUserId(id ?? null);  // 'null' emas, real null
   }, []);
 
   const notify = (message, type = 'success', options = {}) => {
@@ -68,6 +64,11 @@ function ProductDetails() {
   }, [id]);
 
   const handleAddCart = () => {
+    if (!userId || userId === 'null') {
+      notify("Foydalanuvchi aniqlanmadi!", "error");
+      return;
+    }
+
     if (!selectorColor) {
       notify("Iltimos mahsulot rangini tanlang!", "error");
       return;
@@ -79,14 +80,12 @@ function ProductDetails() {
     }
 
     const payload = {
-      product: data.id,                // Mahsulot ID
-      color: selectorColor[0],         // Rang ID
-      size: selectorSize[0],           // O'lcham ID
-      user: userId,                    // user_id (pk bo'lishi kerak!)
+      product: data.id,
+      color: selectorColor[0],
+      size: selectorSize[0],
+      user: parseInt(userId),  // raqam bo'lishi kerak
       quantity: 1
     };
-
-    console.log("POST payload:", payload);
 
     axiosInstance.post('/cart/', payload, {
       headers: {
@@ -103,6 +102,7 @@ function ProductDetails() {
         notify("Xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.", "error");
       });
   };
+
 
   return (
     <div className="bg-white dark:bg-black mx-auto max-w-[600px] min-h-dvh text-black dark:text-white">
