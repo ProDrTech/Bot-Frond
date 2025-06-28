@@ -82,10 +82,10 @@ function ProductDetails() {
     setIsDisable(true);
 
     const CartProduct = {
-      product_id: data.id,
-      color_id: selectorColor[0],
-      size_id: selectorSize[0],
-      user_id: 5765144405,
+      product: data.id,
+      color: selectorColor[0],
+      size: selectorSize[0],
+      user: userId,
       quantity: 1,
     };
 
