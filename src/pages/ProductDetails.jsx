@@ -83,7 +83,7 @@ function ProductDetails() {
       product_id: data.id,
       color: selectorColor[0],
       size: selectorSize[0],
-      user: userId,  // raqam bo'lishi kerak
+      user_id: userId,
       quantity: 1
     };
 
