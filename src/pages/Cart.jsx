@@ -21,8 +21,10 @@ function Cart() {
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    if (tg && tg.initDataUnsafe?.user?.id) {
-      setUserId(tg.initDataUnsafe.user.id);
+    const id = tg?.initDataUnsafe?.user?.id;
+    console.log("Telegram user ID:", id); // <-- Bu yerda tekshirib ko‘ring
+    if (id) {
+      setUserId(id);
     } else {
       setUserId('null');
     }
@@ -63,7 +65,7 @@ function Cart() {
 
   useEffect(() => {
     axiosInstance
-      .get(`cart/${5765144405}`)
+      .get(`order/${userId}`)
       .then((response) => {
         const fetchedProducts = response.data;
         const storedProducts = JSON.parse(localStorage.getItem("count")) || [];
