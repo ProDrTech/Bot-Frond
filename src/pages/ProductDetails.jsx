@@ -80,7 +80,7 @@ function ProductDetails() {
     }
 
     const payload = {
-      product: data.id,
+      product_id: data.id,
       color: selectorColor[0],
       size: selectorSize[0],
       user: parseInt(userId),  // raqam bo'lishi kerak
