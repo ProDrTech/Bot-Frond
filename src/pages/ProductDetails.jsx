@@ -68,48 +68,39 @@ function ProductDetails() {
   }, [id]);
 
   const handleAddCart = () => {
-    console.log("Add to cart button clicked"); // Log add to cart button click
     if (!selectorColor) {
-      console.log("Color not selected"); // Log if color is not selected
-      notify('Iltimos mahsulotni rangini tanlang!', 'error');
+      notify("Iltimos mahsulot rangini tanlang!", "error");
       return;
     }
-    if (!selectorSize) {
-      console.log("Size not selected"); // Log if size is not selected
-      notify('Iltimos mahsulotni o\'lchamini tanlang!', 'error');
-      return;
-    }
-    setIsDisable(true);
 
-    const CartProduct = {
-      product: data.id,
-      color: selectorColor[0],
-      size: selectorSize[0],
-      user: userId,
-      quantity: 1,
+    if (!selectorSize) {
+      notify("Iltimos mahsulot o'lchamini tanlang!", "error");
+      return;
+    }
+
+    const payload = {
+      product: data.id,                // Mahsulot ID
+      color: selectorColor[0],         // Rang ID
+      size: selectorSize[0],           // O'lcham ID
+      user: userId,                    // user_id (pk bo'lishi kerak!)
+      quantity: 1
     };
 
-    console.log("Adding product to cart:", CartProduct); // Log cart product details
+    console.log("POST payload:", payload);
 
-    axiosInstance.post('/cart/', CartProduct, {
+    axiosInstance.post('/cart/', payload, {
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     })
-      .then(() => {
-        console.log("Product added to cart successfully"); // Log success
-        notify('Mahsulot savatchaga qo\'shildi!', 'success', {
-          onClose: () => {
-            navigate(-1);
-          },
+      .then(res => {
+        notify("Mahsulot savatchaga qo'shildi!", "success", {
+          onClose: () => navigate(-1)
         });
       })
-      .catch((error) => {
-        console.error("Error adding product to cart:", error); // Log error
-        notify('Xatolik yuz berdi. Iltimos qayta urinib ko\'ring.', 'error');
-      })
-      .finally(() => {
-        setIsDisable(false);
+      .catch(err => {
+        console.error("Xatolik:", err.response?.data || err.message);
+        notify("Xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.", "error");
       });
   };
 
