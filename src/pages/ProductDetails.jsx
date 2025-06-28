@@ -83,7 +83,7 @@ function ProductDetails() {
       product_id: data.id,
       color: selectorColor[0],
       size: selectorSize[0],
-      user: parseInt(userId),  // raqam bo'lishi kerak
+      user: userId,  // raqam bo'lishi kerak
       quantity: 1
     };
 
