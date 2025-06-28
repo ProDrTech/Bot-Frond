@@ -28,8 +28,14 @@ function ProductDetails() {
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    const id = tg?.initDataUnsafe?.user?.id;
-    setUserId(id ?? null);  // 'null' emas, real null
+    if (tg) {
+      tg.ready(); // WebApp to‘liq yuklanguncha kutamiz
+      const id = tg.initDataUnsafe?.user?.id;
+      if (id) {
+        console.log("Telegramdan olingan foydalanuvchi ID:", id);
+        setUserId(id);
+      }
+    }
   }, []);
 
   const notify = (message, type = 'success', options = {}) => {
