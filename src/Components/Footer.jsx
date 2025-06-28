@@ -6,7 +6,7 @@ import YouTube from '../assets/images/icon/you-tube.svg'
 
 function Footer() {
     return (
-        <footer className='sticky flex flex-col items-center dark:border-[#1c1c1e] bg-white dark:bg-[#121212] px-2 py-4 border-t text-black text-center dark:text-white'>
+        <footer className='bottom-0 left-0 w-full flex flex-col items-center dark:border-[#1c1c1e] bg-white dark:bg-[#121212] px-2 py-4 border-t text-black text-center dark:text-white z-30'>
             <h3 className='mb-4 text-md'>Ijtimoiy Tarmoqlarda</h3>
             <ul className='flex items-center gap-4 mb-6'>
                 <a target='_blank' href="https://www.instagram.com/asadmaxmud?igsh=a2pmaHBoYjZxNTQy"> <img className='w-10' src={Insta} /> </a>
