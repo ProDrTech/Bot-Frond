@@ -59,15 +59,12 @@ function Order() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("Bosildi!")
+
     const isValid = validate();
-    if (!isValid) {
-      return;
-    }
+    if (!isValid) return;
 
     const storedItems = JSON.parse(localStorage.getItem('count')) || [];
 
-    // Faqat to‘liq itemlar qoladi
     const formattedOrderItems = storedItems
       .filter(item => item.product && item.color && item.size)
       .map(item => ({
@@ -84,42 +81,48 @@ function Order() {
     }
 
     const orderData = {
-      "user": userId,
-      "delivery_type": deliveryMethod,
-      "payment_method": paymentMethod,
-      "name": user,
-      "phone": number,
-      "country": selectedViloyat,
-      "address": address,
-      "order_items": formattedOrderItems,
-    }
-    console.log(orderData)
+      user: userId,
+      delivery_type: deliveryMethod,
+      payment_method: paymentMethod,
+      name: user,
+      phone: number,
+      country: selectedViloyat,
+      address: address,
+      order_items: formattedOrderItems,
+    };
+
+    console.log("Yuborilayotgan buyurtma:", orderData);
+
     axiosInstance.post('/order/', orderData, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
-      .then(() => {
-        notify("Buyurtma muvaffaqiyatli yuborildi!", "success", {
-          onClose: () => {
-            navigate("/");
-          },
-        });
+      .then((res) => {
+        console.log("Javob:", res);
+        if (res.status === 200 || res.status === 201) {
+          notify("Buyurtma muvaffaqiyatli yuborildi!", "success", {
+            onClose: () => navigate("/")
+          });
+        } else {
+          notify(`Xatolik: Server ${res.status} status qaytardi`, "error");
+        }
       })
       .catch((error) => {
-        notify('Xatolik yuz berdi. Iltimos qayta urinib ko\'ring.', 'error');
-        console.error(error);
+        console.error("Server xatoligi:", error);
+        notify("Xatolik yuz berdi. Iltimos qayta urinib ko‘ring.", "error");
       })
       .finally(() => {
         localStorage.removeItem("count");
         setPaymentMethod("Naqt pul");
         setDeliveryMethod("pickup");
-        setSelectedViloyat('');
+        setSelectedViloyat('Toshkent Shahar');
         setUser("");
         setNumber("");
         setAddress("");
       });
   }
+
 
   useEffect(() => {
     const count = JSON.parse(localStorage.getItem('count'));
