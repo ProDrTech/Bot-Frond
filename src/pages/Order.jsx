@@ -6,7 +6,6 @@ import { PatternFormat } from 'react-number-format';
 import { UserID } from '../App';
 
 function Order() {
-  const [totalPrice, setTotalPrice] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('Naqt pul');
   const [deliveryMethod, setDeliveryMethod] = useState('pickup');
   const [user, setUser] = useState('');
@@ -68,7 +67,6 @@ function Order() {
 
     const storedItems = JSON.parse(localStorage.getItem('count')) || [];
 
-    const total_price = formattedOrderItems.reduce((acc, item) => acc + item.price, 0) + (deliveryMethod === 'delivery' ? 40000 : 0);
     // Faqat to‘liq itemlar qoladi
     const formattedOrderItems = storedItems
       .filter(item => item.product && item.color && item.size)
@@ -77,7 +75,7 @@ function Order() {
         color: item.color.id,
         size: item.size.id,
         quantity: item.quantity,
-        price: total_price
+        price: item.product.discount_price
       }));
 
     if (formattedOrderItems.length === 0) {
@@ -133,22 +131,6 @@ function Order() {
       navigate('/');
     }
   }, [navigate]);
-
-  useEffect(() => {
-    const storedItems = JSON.parse(localStorage.getItem('count')) || [];
-    let total = 0;
-
-    storedItems.forEach(item => {
-      const price = parseFloat(item.product?.discount_price || item.product?.price || 0);
-      total += item.quantity * price;
-    });
-
-    if (deliveryMethod === 'delivery') {
-      total += 40000;
-    }
-
-    setTotalPrice(total);
-  }, [deliveryMethod]);  // delivery usuli o'zgarsa qayta hisoblanadi
 
   return (
     <form onSubmit={handleSubmit} className="bg-white dark:bg-black mx-auto p-2.5 max-w-[600px] text-black dark:text-white select-none">
@@ -234,9 +216,6 @@ function Order() {
           <p className="mt-1 text-gray-500 text-sm">Siz muhim deb hisoblagan ma'lumotlarni ko'rsating!</p>
         </div>
       </div>
-      <p className="text-right font-semibold text-lg mt-4">
-        Umumiy narx: {totalPrice.toLocaleString()} UZS
-      </p>
       <button type="submit" className='bg-black dark:bg-white mt-4 mb-2 p-2.5 rounded-md w-full font-semibold text-[18px] text-white dark:text-black transition-[0.4s]'>
         Yuborish
       </button>
