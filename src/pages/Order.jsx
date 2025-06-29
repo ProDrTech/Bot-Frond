@@ -93,33 +93,21 @@ function Order() {
 
     console.log("Yuborilayotgan buyurtma:", orderData);
 
-    axiosInstance.post('/order/', orderData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    axiosInstance.post('/order/', orderData)
       .then((res) => {
         console.log("Javob:", res);
-        if (res.status === 200 || res.status === 201) {
-          notify("Buyurtma muvaffaqiyatli yuborildi!", "success", {
-            onClose: () => navigate("/")
-          });
-        } else {
-          notify(`Xatolik: Server ${res.status} status qaytardi`, "error");
-        }
+        notify("Buyurtma yuborildi!", "success", {
+          onClose: () => navigate("/")
+        });
+        localStorage.removeItem("count");
       })
       .catch((error) => {
-        console.error("Server xatoligi:", error);
-        notify("Xatolik yuz berdi. Iltimos qayta urinib ko‘ring.", "error");
-      })
-      .finally(() => {
-        localStorage.removeItem("count");
-        setPaymentMethod("Naqt pul");
-        setDeliveryMethod("pickup");
-        setSelectedViloyat('Toshkent Shahar');
-        setUser("");
-        setNumber("");
-        setAddress("");
+        if (error.response) {
+          console.error("Xatolik javobi:", error.response.data);
+          notify("Xatolik: " + JSON.stringify(error.response.data), "error");
+        } else {
+          notify("Tarmoq muammosi. Iltimos, qayta urinib ko‘ring.", "error");
+        }
       });
   }
 
