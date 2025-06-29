@@ -86,10 +86,10 @@ function ProductDetails() {
     }
 
     const payload = {
-      product_id: data.id,
+      product: data.id,
       color: selectorColor[0],
       size: selectorSize[0],
-      user_id: userId,
+      user: userId,
       quantity: 1
     };
 
