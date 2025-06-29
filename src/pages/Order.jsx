@@ -112,7 +112,7 @@ function Order() {
       })
       .finally(() => {
         localStorage.removeItem("count");
-        setPaymentMethod("cash");
+        setPaymentMethod("Naqt pul");
         setDeliveryMethod("pickup");
         setSelectedViloyat('');
         setUser("");
