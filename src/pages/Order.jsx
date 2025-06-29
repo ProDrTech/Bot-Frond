@@ -81,7 +81,7 @@ function Order() {
     }
 
     const orderData = {
-      user: userId,
+      user_id: userId,
       delivery_type: deliveryMethod,
       payment_method: paymentMethod,
       name: user,
