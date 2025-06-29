@@ -153,7 +153,6 @@ function Cart() {
         ) : (
           <p className="px-4">Savat bo‘sh.</p>
         )}
-totalPrice
         <div className="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-[#121212] p-4 rounded-t-xl max-w-[600px] mx-auto">
           <div className="flex justify-between">
             <span>Buyurtma miqdori:</span>
