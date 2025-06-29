@@ -17,11 +17,12 @@ function Order() {
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    if (tg && tg.initDataUnsafe?.user?.id) {
-      setUserId(tg.initDataUnsafe.user.id);
-    } else {
-      setUserId('null');
-    }
+    // if (tg && tg.initDataUnsafe?.user?.id) {
+    //   setUserId(tg.initDataUnsafe.user.id);
+    // } else {
+    //   setUserId('null');
+    // }
+    setUserId(7318128389)
   }, []);
 
   const notify = (message, type = 'success', options = {}) => {
@@ -59,6 +60,7 @@ function Order() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    console.log("Bosildi!")
     const isValid = validate();
     if (!isValid) {
       return;
@@ -75,7 +77,7 @@ function Order() {
     }));
 
     const orderData = {
-      "user_id": userId,
+      "user": userId,
       "delivery_type": deliveryMethod,
       "payment_method": paymentMethod,
       "name": user,
@@ -84,7 +86,7 @@ function Order() {
       "address": address,
       "order_items": formattedOrderItems,
     }
-
+    console.log(orderData)
     axiosInstance.post('/order/', orderData, {
       headers: {
         'Content-Type': 'application/json',
