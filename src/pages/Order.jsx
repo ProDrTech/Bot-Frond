@@ -59,12 +59,15 @@ function Order() {
 
   function handleSubmit(event) {
     event.preventDefault();
-
+    console.log("Bosildi!")
     const isValid = validate();
-    if (!isValid) return;
+    if (!isValid) {
+      return;
+    }
 
     const storedItems = JSON.parse(localStorage.getItem('count')) || [];
 
+    // Faqat to‘liq itemlar qoladi
     const formattedOrderItems = storedItems
       .filter(item => item.product && item.color && item.size)
       .map(item => ({
@@ -81,35 +84,42 @@ function Order() {
     }
 
     const orderData = {
-      user: userId,
-      delivery_type: deliveryMethod,
-      payment_method: paymentMethod,
-      name: user,
-      phone: number,
-      country: selectedViloyat,
-      address: address,
-      order_items: formattedOrderItems,
-    };
-
-    console.log("Yuborilayotgan buyurtma:", orderData);
-
-    axiosInstance.post('/order/', orderData)
-      .then((res) => {
-        console.log("Javob:", res);
-        notify("Buyurtma yuborildi!", "success", {
-          onClose: () => navigate("/")
+      "user": userId,
+      "delivery_type": deliveryMethod,
+      "payment_method": paymentMethod,
+      "name": user,
+      "phone": number,
+      "country": selectedViloyat,
+      "address": address,
+      "order_items": formattedOrderItems,
+    }
+    console.log(orderData)
+    axiosInstance.post('/order/', orderData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(() => {
+        notify("Buyurtma muvaffaqiyatli yuborildi!", "success", {
+          onClose: () => {
+            navigate("/");
+          },
         });
-        localStorage.removeItem("count");
       })
       .catch((error) => {
-        console.log("Javob:", res);
-        notify("Buyurtma yuborildi!", "success", {
-          onClose: () => navigate("/")
-        });
+        notify('Xatolik yuz berdi. Iltimos qayta urinib ko\'ring.', 'error');
+        console.error(error);
+      })
+      .finally(() => {
         localStorage.removeItem("count");
+        setPaymentMethod("Naqt pul");
+        setDeliveryMethod("pickup");
+        setSelectedViloyat('');
+        setUser("");
+        setNumber("");
+        setAddress("");
       });
   }
-
 
   useEffect(() => {
     const count = JSON.parse(localStorage.getItem('count'));
