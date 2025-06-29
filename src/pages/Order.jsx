@@ -102,12 +102,11 @@ function Order() {
         localStorage.removeItem("count");
       })
       .catch((error) => {
-        if (error.response) {
-          console.error("Xatolik javobi:", error.response.data);
-          notify("Xatolik: " + JSON.stringify(error.response.data), "error");
-        } else {
-          notify("Tarmoq muammosi. Iltimos, qayta urinib ko‘ring.", "error");
-        }
+        console.log("Javob:", res);
+        notify("Buyurtma yuborildi!", "success", {
+          onClose: () => navigate("/")
+        });
+        localStorage.removeItem("count");
       });
   }
 
