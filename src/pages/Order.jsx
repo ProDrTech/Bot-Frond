@@ -68,7 +68,22 @@ function Order() {
 
     const storedItems = JSON.parse(localStorage.getItem('count')) || [];
 
-    const total_price = formattedOrderItems.reduce((acc, item) => acc + item.price, 0) + (deliveryMethod === 'delivery' ? 40000 : 0);
+    useEffect(() => {
+      const storedItems = JSON.parse(localStorage.getItem('count')) || [];
+      let total = 0;
+
+      storedItems.forEach(item => {
+        const price = parseFloat(item.product?.discount_price || item.product?.price || 0);
+        total += item.quantity * price;
+      });
+
+      if (deliveryMethod === 'delivery') {
+        total += 40000;
+      }
+
+      setTotalPrice(total);
+    }, [deliveryMethod]);  // delivery usuli o'zgarsa qayta hisoblanadi
+
     // Faqat to‘liq itemlar qoladi
     const formattedOrderItems = storedItems
       .filter(item => item.product && item.color && item.size)
@@ -77,7 +92,7 @@ function Order() {
         color: item.color.id,
         size: item.size.id,
         quantity: item.quantity,
-        price: total_price
+        price: totalPrice
       }));
 
     if (formattedOrderItems.length === 0) {
@@ -134,21 +149,6 @@ function Order() {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    const storedItems = JSON.parse(localStorage.getItem('count')) || [];
-    let total = 0;
-
-    storedItems.forEach(item => {
-      const price = parseFloat(item.product?.discount_price || item.product?.price || 0);
-      total += item.quantity * price;
-    });
-
-    if (deliveryMethod === 'delivery') {
-      total += 40000;
-    }
-
-    setTotalPrice(total);
-  }, [deliveryMethod]);  // delivery usuli o'zgarsa qayta hisoblanadi
 
   return (
     <form onSubmit={handleSubmit} className="bg-white dark:bg-black mx-auto p-2.5 max-w-[600px] text-black dark:text-white select-none">
