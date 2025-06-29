@@ -71,7 +71,7 @@ function Order() {
     const formattedOrderItems = storedItems
       .filter(item => item.product && item.color && item.size)
       .map(item => ({
-        product_id: item.product.id,
+        product: item.product.id,
         color: item.color.id,
         size: item.size.id,
         quantity: item.quantity,
