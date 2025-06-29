@@ -17,12 +17,11 @@ function Order() {
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    // if (tg && tg.initDataUnsafe?.user?.id) {
-    //   setUserId(tg.initDataUnsafe.user.id);
-    // } else {
-    //   setUserId('null');
-    // }
-    setUserId(7318128389)
+    if (tg && tg.initDataUnsafe?.user?.id) {
+      setUserId(tg.initDataUnsafe.user.id);
+    } else {
+      setUserId('null');
+    }
   }, []);
 
   const notify = (message, type = 'success', options = {}) => {
@@ -66,15 +65,23 @@ function Order() {
       return;
     }
 
-    const storedItems = JSON.parse(localStorage.getItem('count'));
+    const storedItems = JSON.parse(localStorage.getItem('count')) || [];
 
-    const formattedOrderItems = storedItems.map(item => ({
-      product: item.product.id,
-      color: item.color.id,
-      size: item.size.id,
-      quantity: item.quantity,
-      price: item.product.discount_price
-    }));
+    // Faqat to‘liq itemlar qoladi
+    const formattedOrderItems = storedItems
+      .filter(item => item.product && item.color && item.size)
+      .map(item => ({
+        product: item.product.id,
+        color: item.color.id,
+        size: item.size.id,
+        quantity: item.quantity,
+        price: item.product.discount_price
+      }));
+
+    if (formattedOrderItems.length === 0) {
+      notify("Buyurtma uchun mahsulotlar topilmadi!", "error");
+      return;
+    }
 
     const orderData = {
       "user": userId,
