@@ -71,7 +71,7 @@ function Order() {
     const formattedOrderItems = storedItems
       .filter(item => item.product && item.color && item.size)
       .map(item => ({
-        product: item.product.id,
+        product_id: item.product.id,
         color: item.color.id,
         size: item.size.id,
         quantity: item.quantity,
@@ -84,7 +84,7 @@ function Order() {
     }
 
     const orderData = {
-      "user_id": 7318128389,
+      "user_id": userId,
       "delivery_type": deliveryMethod,
       "payment_method": paymentMethod,
       "name": user,
