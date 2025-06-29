@@ -33,7 +33,7 @@ function Cart() {
     if (!userId) return;
 
     axiosInstance
-      .get(`cart/${userId}/`)
+      .get(`cart/${user}/`)
       .then((response) => {
         const cartItems = response.data;
         localStorage.setItem("count", JSON.stringify(cartItems));
@@ -70,7 +70,7 @@ function Cart() {
   const handleIncrement = (item) => {
     const updatedItem = { ...item, quantity: item.quantity + 1 };
     axiosInstance
-      .put(`/cart/${userId}/${item.id}/`, updatedItem)
+      .put(`/cart/${user}/${item.id}/`, updatedItem)
       .then((res) => {
         dispatch(update(updatedItem));
       })
@@ -81,7 +81,7 @@ function Cart() {
     if (item.quantity <= 1) return;
     const updatedItem = { ...item, quantity: item.quantity - 1 };
     axiosInstance
-      .put(`/cart/${userId}/${item.id}/`, updatedItem)
+      .put(`/cart/${user}/${item.id}/`, updatedItem)
       .then((res) => {
         dispatch(update(updatedItem));
       })
@@ -91,10 +91,10 @@ function Cart() {
   const handleRemove = (item) => {
     setIsDisable(true);
     axiosInstance
-      .delete(`cart/${userId}/${item.id}/`)
+      .delete(`cart/${user}/${item.id}/`)
       .then(() => {
         notify("Mahsulot o‘chirildi");
-        return axiosInstance.get(`cart/${userId}/`);
+        return axiosInstance.get(`cart/${user}/`);
       })
       .then((res) => {
         dispatch(setCart(res.data));
@@ -153,7 +153,7 @@ function Cart() {
         ) : (
           <p className="px-4">Savat bo‘sh.</p>
         )}
-
+totalPrice
         <div className="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-[#121212] p-4 rounded-t-xl max-w-[600px] mx-auto">
           <div className="flex justify-between">
             <span>Buyurtma miqdori:</span>
@@ -165,7 +165,7 @@ function Cart() {
           </div>
           <div className="flex justify-between font-bold">
             <span>Jami:</span>
-            <span>{Math.trunc(item.discount_price + 40000)} UZS</span>
+            <span>{Math.trunc(totalPrice + 40000)} UZS</span>
           </div>
           <button onClick={handleClick} className="mt-2 bg-black text-white w-full py-2 rounded">
             Qabul qilaman
