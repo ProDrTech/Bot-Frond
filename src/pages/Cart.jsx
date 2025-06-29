@@ -47,7 +47,7 @@ function Cart() {
       let totalQty = 0;
       let totalAmount = 0;
       cart.forEach((item) => {
-        const price = parseFloat(item.product?.price || 0);
+        const price = parseFloat(item.product?.discount_price || item.product?.price || 0);
         totalQty += item.quantity;
         totalAmount += item.quantity * price;
       });
@@ -135,7 +135,16 @@ function Cart() {
                 />
                 <div className="ml-4 flex-grow">
                   <h3 className="text-base font-medium">{item.product?.name}</h3>
-                  <p>{item.product?.price} UZS</p>
+                  <p>
+                    {item.product?.discount_price ? (
+                      <>
+                        <span className="text-[#00C17B] font-semibold">{item.product.discount_price} UZS</span>
+                        <span className="line-through text-gray-500 ml-2">{item.product.price} UZS</span>
+                      </>
+                    ) : (
+                      <span>{item.product?.price} UZS</span>
+                    )}
+                  </p>
                   <p>Hajmi: {item.size?.size_name}</p>
                   <p>Rangi: {item.color?.name}</p>
                   <div className="flex mt-2">
