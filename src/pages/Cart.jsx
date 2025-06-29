@@ -165,7 +165,7 @@ function Cart() {
           </div>
           <div className="flex justify-between font-bold">
             <span>Jami:</span>
-            <span>{Math.trunc(totalPrice + 40000)} UZS</span>
+            <span>{Math.trunc(item.discount_price + 40000)} UZS</span>
           </div>
           <button onClick={handleClick} className="mt-2 bg-black text-white w-full py-2 rounded">
             Qabul qilaman
