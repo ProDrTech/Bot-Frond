@@ -1,4 +1,3 @@
-// Cart.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, update } from "../store/cartSlice";
@@ -22,6 +21,7 @@ function Cart() {
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
+
     if (tg?.initDataUnsafe?.user?.id) {
       setUserId(tg.initDataUnsafe.user.id);
     } else {
@@ -30,15 +30,28 @@ function Cart() {
   }, []);
 
   useEffect(() => {
+    if (!userId) return;
+
+    axiosInstance
+      .get(`cart/${userId}/`)
+      .then((response) => {
+        const cartItems = response.data;
+        localStorage.setItem("count", JSON.stringify(cartItems));
+        dispatch(setCart(cartItems));
+      })
+      .catch((err) => console.error("Cart fetch error:", err));
+  }, [userId]);
+
+  useEffect(() => {
     if (cart && Array.isArray(cart)) {
-      let tp = 0;
-      let sum = 0;
-      cart.forEach((c) => {
-        sum += c.quantity || 0;
-        tp += (c.product.discount_price || 0) * (c.quantity || 0);
+      let totalQty = 0;
+      let totalAmount = 0;
+      cart.forEach((item) => {
+        totalQty += item.quantity;
+        totalAmount += item.quantity * item.price; // price field from backend
       });
-      setTotal(sum);
-      setTotalPrice(tp);
+      setTotal(totalQty);
+      setTotalPrice(totalAmount);
     }
   }, [cart]);
 
@@ -53,126 +66,49 @@ function Cart() {
     });
   };
 
-  useEffect(() => {
-    if (!userId) return;
-
+  const handleIncrement = (item) => {
+    const updatedItem = { ...item, quantity: item.quantity + 1 };
     axiosInstance
-      .get(`cart/${userId}/`)
-      .then((response) => {
-        const fetched = response.data;
-        const stored = JSON.parse(localStorage.getItem("count")) || [];
-
-        if (!stored.length) {
-          const filtered = fetched.filter((p) => p.quantity >= 1);
-          localStorage.setItem("count", JSON.stringify(filtered));
-          dispatch(setCart(filtered));
-          return;
-        }
-
-        const updated = fetched
-          .map((backend) => {
-            const localMatch = stored.find((s) => s.id === backend.id);
-            if (!localMatch && backend.quantity >= 1) return backend;
-            if (localMatch) {
-              return backend.quantity > localMatch.quantity ? { ...backend } : localMatch;
-            }
-            return null;
-          })
-          .filter(Boolean);
-
-        const remaining = stored.filter(
-          (s) => !fetched.some((b) => b.id === s.id)
-        );
-
-        const final = [...updated, ...remaining];
-        localStorage.setItem("count", JSON.stringify(final));
-        dispatch(setCart(final));
+      .put(`/cart/${userId}/${item.id}/`, updatedItem)
+      .then((res) => {
+        dispatch(update(updatedItem));
       })
-      .catch((err) => console.error("Cart fetch error:", err));
-  }, [userId]);
+      .catch((err) => console.error(err));
+  };
 
-  function handleIncrement(item) {
-    const stored = JSON.parse(localStorage.getItem("count")) || [];
-    const updated = stored.map((s) =>
-      s.id === item.id && s.color.id === item.color.id && s.size.id === item.size.id
-        ? { ...s, quantity: s.quantity + 1 }
-        : s
-    );
-    dispatch(update({ ...item, quantity: item.quantity + 1 }));
-    localStorage.setItem("count", JSON.stringify(updated));
-    setTotal((prev) => prev + 1);
-    setTotalPrice((prev) => prev + item.product.discount_price);
-  }
-
-  function handleDecrement(item) {
-    const stored = JSON.parse(localStorage.getItem("count")) || [];
+  const handleDecrement = (item) => {
     if (item.quantity <= 1) return;
+    const updatedItem = { ...item, quantity: item.quantity - 1 };
+    axiosInstance
+      .put(`/cart/${userId}/${item.id}/`, updatedItem)
+      .then((res) => {
+        dispatch(update(updatedItem));
+      })
+      .catch((err) => console.error(err));
+  };
 
-    const updated = stored.map((s) =>
-      s.id === item.id && s.color.id === item.color.id && s.size.id === item.size.id
-        ? { ...s, quantity: s.quantity - 1 }
-        : s
-    );
-    dispatch(update({ ...item, quantity: item.quantity - 1 }));
-    localStorage.setItem("count", JSON.stringify(updated));
-    setTotal((prev) => prev - 1);
-    setTotalPrice((prev) => prev - item.product.discount_price);
-  }
-
-  function handleRemove(item) {
+  const handleRemove = (item) => {
     setIsDisable(true);
-    const CustomConfirmToast = () => (
-      <div>
-        <p className="text-black">Mahsulotni o‘chirmoqchimisiz?</p>
-        <div className="flex gap-2 mt-2">
-          <button
-            onClick={() => {
-              axiosInstance
-                .delete(`cart/${userId}/${item.id}/`)
-                .then(() => {
-                  return axiosInstance.get(`cart/${userId}/`);
-                })
-                .then((res) => {
-                  const updatedCart = res.data;
-                  dispatch(setCart(updatedCart));
-                  const stored = JSON.parse(localStorage.getItem("count")) || [];
-                  const filtered = stored.filter(
-                    (s) =>
-                      s.id !== item.id ||
-                      s.color.id !== item.color.id ||
-                      s.size.id !== item.size.id
-                  );
-                  localStorage.setItem("count", JSON.stringify(filtered));
-                  notify("Mahsulot o‘chirildi");
-                })
-                .catch(() => notify("Xatolik yuz berdi", "error"))
-                .finally(() => setIsDisable(false));
-              toast.dismiss();
-            }}
-            className="bg-green-600 text-white px-3 py-1 rounded"
-          >
-            Ha
-          </button>
-          <button
-            onClick={() => toast.dismiss()}
-            className="bg-red-500 text-white px-3 py-1 rounded"
-          >
-            Yo'q
-          </button>
-        </div>
-      </div>
-    );
+    axiosInstance
+      .delete(`cart/${userId}/${item.id}/`)
+      .then(() => {
+        notify("Mahsulot o‘chirildi");
+        return axiosInstance.get(`cart/${userId}/`);
+      })
+      .then((res) => {
+        dispatch(setCart(res.data));
+      })
+      .catch(() => notify("Xatolik yuz berdi", "error"))
+      .finally(() => setIsDisable(false));
+  };
 
-    toast.info(<CustomConfirmToast />, { autoClose: false });
-  }
-
-  function handleClick() {
+  const handleClick = () => {
     if (!cart.length) {
       notify("Savat bo‘sh", "error");
       return;
     }
     navigate("/order");
-  }
+  };
 
   return (
     <>
@@ -181,28 +117,26 @@ function Cart() {
         <ToastContainer />
         <div className="flex justify-between p-4">
           <h2 className="text-2xl font-semibold">Savat</h2>
-          <Link to="/" className="underline">
-            Bosh sahifa
-          </Link>
+          <Link to="/" className="underline">Bosh sahifa</Link>
         </div>
 
         {cart && cart.length ? (
           <div className="p-4 space-y-4">
             {cart.map((item) => (
               <div
-                key={`${item.id}-${item.color.id}-${item.size.id}`}
+                key={item.id}
                 className="flex items-center border-b pb-4"
               >
                 <img
-                  src={item.product.main_image}
-                  alt={item.product.name}
+                  src={item.product?.main_image}
+                  alt={item.product?.name}
                   className="w-[75px] h-[75px] object-cover rounded shadow"
                 />
                 <div className="ml-4 flex-grow">
-                  <h3 className="text-base font-medium">{item.product.name}</h3>
-                  <p>{item.product.discount_price} UZS</p>
-                  <p>Hajmi: {item.size.size_name}</p>
-                  <p>Rangi: {item.color.name}</p>
+                  <h3 className="text-base font-medium">{item.product?.name}</h3>
+                  <p>{item.price} UZS</p>
+                  <p>Hajmi: {item.size?.size_name}</p>
+                  <p>Rangi: {item.color?.name}</p>
                   <div className="flex mt-2">
                     <button onClick={() => handleDecrement(item)} className="bg-gray-300 px-2">-</button>
                     <span className="px-4">{item.quantity}</span>
@@ -230,7 +164,7 @@ function Cart() {
           </div>
           <div className="flex justify-between font-bold">
             <span>Jami:</span>
-            <span>{Math.trunc(totalPrice)} UZS</span>
+            <span>{Math.trunc(totalPrice + 40000)} UZS</span>
           </div>
           <button onClick={handleClick} className="mt-2 bg-black text-white w-full py-2 rounded">
             Qabul qilaman
