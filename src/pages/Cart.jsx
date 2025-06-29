@@ -47,8 +47,9 @@ function Cart() {
       let totalQty = 0;
       let totalAmount = 0;
       cart.forEach((item) => {
+        const price = parseFloat(item.product?.price || 0);
         totalQty += item.quantity;
-        totalAmount += item.quantity * item.price; // price field from backend
+        totalAmount += item.quantity * price;
       });
       setTotal(totalQty);
       setTotalPrice(totalAmount);
@@ -134,7 +135,7 @@ function Cart() {
                 />
                 <div className="ml-4 flex-grow">
                   <h3 className="text-base font-medium">{item.product?.name}</h3>
-                  <p>{item.price} UZS</p>
+                  <p>{item.product?.price} UZS</p>
                   <p>Hajmi: {item.size?.size_name}</p>
                   <p>Rangi: {item.color?.name}</p>
                   <div className="flex mt-2">
