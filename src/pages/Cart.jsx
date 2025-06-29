@@ -33,7 +33,7 @@ function Cart() {
     if (!userId) return;
 
     axiosInstance
-      .get(`cart/${user}/`)
+      .get(`cart/${userId}/`)
       .then((response) => {
         const cartItems = response.data;
         localStorage.setItem("count", JSON.stringify(cartItems));
@@ -70,7 +70,7 @@ function Cart() {
   const handleIncrement = (item) => {
     const updatedItem = { ...item, quantity: item.quantity + 1 };
     axiosInstance
-      .put(`/cart/${user}/${item.id}/`, updatedItem)
+      .put(`/cart/${userId}/${item.id}/`, updatedItem)
       .then((res) => {
         dispatch(update(updatedItem));
       })
@@ -81,7 +81,7 @@ function Cart() {
     if (item.quantity <= 1) return;
     const updatedItem = { ...item, quantity: item.quantity - 1 };
     axiosInstance
-      .put(`/cart/${user}/${item.id}/`, updatedItem)
+      .put(`/cart/${userId}/${item.id}/`, updatedItem)
       .then((res) => {
         dispatch(update(updatedItem));
       })
@@ -91,10 +91,10 @@ function Cart() {
   const handleRemove = (item) => {
     setIsDisable(true);
     axiosInstance
-      .delete(`cart/${user}/${item.id}/`)
+      .delete(`cart/${userId}/${item.id}/`)
       .then(() => {
         notify("Mahsulot o‘chirildi");
-        return axiosInstance.get(`cart/${user}/`);
+        return axiosInstance.get(`cart/${userId}/`);
       })
       .then((res) => {
         dispatch(setCart(res.data));
@@ -153,6 +153,7 @@ function Cart() {
         ) : (
           <p className="px-4">Savat bo‘sh.</p>
         )}
+
         <div className="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-[#121212] p-4 rounded-t-xl max-w-[600px] mx-auto">
           <div className="flex justify-between">
             <span>Buyurtma miqdori:</span>
