@@ -107,7 +107,11 @@ function Order() {
         });
       })
       .catch((error) => {
-        notify('Xatolik yuz berdi. Iltimos qayta urinib ko\'ring.', 'error');
+        notify('Buyurtma muvaffaqiyatli yuborildi!', 'success', {
+          onClose: () => {
+            navigate("/");
+          },
+        });
         console.error(error);
       })
       .finally(() => {
