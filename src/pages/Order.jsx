@@ -69,19 +69,19 @@ function Order() {
     const storedItems = JSON.parse(localStorage.getItem('count')) || [];
 
 
-    const DELIVERY_PRICE = 40000;  // yetkazib berish narxi
+    const DELIVERY_PRICE = 40000;
 
     const formattedOrderItems = storedItems
       .filter(item => item.product && item.color && item.size)
-      .map(item => {
+      .map((item, index) => {
         const basePrice = item.product.discount_price;
-        const shippingFee = deliveryMethod === 'delivery' ? DELIVERY_PRICE : 0;
+        const price = basePrice + (index === 0 && deliveryMethod === 'delivery' ? DELIVERY_PRICE : 0); // ✅ Faqat birinchi itemga
         return {
           product: item.product.id,
           color: item.color.id,
           size: item.size.id,
           quantity: item.quantity,
-          price: item.product.discount_price  // har bir itemga narx qo‘shilmoqda
+          price: price,
         };
       });
 
