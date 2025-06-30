@@ -71,19 +71,13 @@ function Order() {
 
     const DELIVERY_PRICE = 40000;
 
-    const formattedOrderItems = storedItems
-      .filter(item => item.product && item.color && item.size)
-      .map((item, index) => {
-        const basePrice = item.product.discount_price;
-        const price = basePrice + (index === 0 && deliveryMethod === 'delivery' ? DELIVERY_PRICE : 0); // ✅ Faqat birinchi itemga
-        return {
-          product: item.product.id,
-          color: item.color.id,
-          size: item.size.id,
-          quantity: item.quantity,
-          price: price,
-        };
-      });
+    // Frontendda umumiy narx hisoblanadi
+    const productTotal = storedItems.reduce((acc, item) => {
+      const basePrice = item.product.discount_price;
+      return acc + basePrice * item.quantity;
+    }, 0);
+
+    const totalPrice = productTotal + (deliveryMethod === 'delivery' ? DELIVERY_PRICE : 0);
 
     if (formattedOrderItems.length === 0) {
       notify("Buyurtma uchun mahsulotlar topilmadi!", "error");
@@ -98,7 +92,13 @@ function Order() {
       "phone": number,
       "country": selectedViloyat,
       "address": address,
-      "order_items": formattedOrderItems,
+      'order_items': formattedOrderItems.map(item => ({
+        product: item.product.id,
+        color: item.color.id,
+        size: item.size.id,
+        quantity: item.quantity,
+        price: item.product.discount_price // faqat asosiy narx
+      }))
     }
     console.log(orderData)
     axiosInstance.post('/order/', orderData, {
