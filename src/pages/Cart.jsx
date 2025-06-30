@@ -33,7 +33,7 @@ function Cart() {
     if (!userId) return;
 
     axiosInstance
-      .get(`cart/${userId}/`)
+      .get(`cart/${7318128389}/`)
       .then((response) => {
         const cartItems = response.data;
         localStorage.setItem("count", JSON.stringify(cartItems));
@@ -70,7 +70,7 @@ function Cart() {
   const handleIncrement = (item) => {
     const updatedItem = { ...item, quantity: item.quantity + 1 };
     axiosInstance
-      .put(`/cart/${userId}/${item.id}/`, updatedItem)
+      .put(`/cart/${7318128389}/${item.id}/`, updatedItem)
       .then((res) => {
         dispatch(update(updatedItem));
       })
@@ -81,7 +81,7 @@ function Cart() {
     if (item.quantity <= 1) return;
     const updatedItem = { ...item, quantity: item.quantity - 1 };
     axiosInstance
-      .put(`/cart/${userId}/${item.id}/`, updatedItem)
+      .put(`/cart/${7318128389}/${item.id}/`, updatedItem)
       .then((res) => {
         dispatch(update(updatedItem));
       })
@@ -91,10 +91,10 @@ function Cart() {
   const handleRemove = (item) => {
     setIsDisable(true);
     axiosInstance
-      .delete(`cart/${userId}/${item.id}/`)
+      .delete(`cart/${7318128389}/${item.id}/`)
       .then(() => {
         notify("Mahsulot o‘chirildi");
-        return axiosInstance.get(`cart/${userId}/`);
+        return axiosInstance.get(`cart/${7318128389}/`);
       })
       .then((res) => {
         dispatch(setCart(res.data));
@@ -152,7 +152,7 @@ function Cart() {
                     <span className="px-4">{item.quantity}</span>
                     <button onClick={() => handleIncrement(item)} className="bg-gray-300 px-2">+</button>
                   </div>
-                </div>
+                </div>userId
                 <button onClick={() => handleRemove(item)} disabled={isDisable}>
                   <img src={Delete} alt="delete" className="w-6 h-6" />
                 </button>

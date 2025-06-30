@@ -75,9 +75,11 @@ function Order() {
         color: item.color.id,
         size: item.size.id,
         quantity: item.quantity,
-        price: item.product.discount_price
+        price: deliveryMethod === 'delivery'
+          ? parseFloat(item.product.discount_price) + 40000
+          : parseFloat(item.product.discount_price),
       }));
-
+    console.log(formattedOrderItems)
     if (formattedOrderItems.length === 0) {
       notify("Buyurtma uchun mahsulotlar topilmadi!", "error");
       return;
@@ -94,11 +96,11 @@ function Order() {
       "order_items": formattedOrderItems,
     }
     console.log(orderData)
-    axiosInstance.post('/order/', orderData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+      axiosInstance.post('/order/', orderData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .then(() => {
         notify("Buyurtma muvaffaqiyatli yuborildi!", "success", {
           onClose: () => {
