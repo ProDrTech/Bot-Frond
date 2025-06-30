@@ -6,7 +6,6 @@ import { PatternFormat } from 'react-number-format';
 import { UserID } from '../App';
 
 function Order() {
-  const [orderItems, setOrderItems] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('Naqt pul');
   const [deliveryMethod, setDeliveryMethod] = useState('pickup');
   const [user, setUser] = useState('');
@@ -16,14 +15,14 @@ function Order() {
   const { userId, setUserId } = useContext(UserID)
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const tg = window.Telegram?.WebApp;
-  //   if (tg && tg.initDataUnsafe?.user?.id) {
-  //     setUserId(tg.initDataUnsafe.user.id);
-  //   } else {
-  //     setUserId('null');
-  //   }
-  // }, []);
+  useEffect(() => {
+    const tg = window.Telegram?.WebApp;
+    if (tg && tg.initDataUnsafe?.user?.id) {
+      setUserId(tg.initDataUnsafe.user.id);
+    } else {
+      setUserId('null');
+    }
+  }, []);
 
   const notify = (message, type = 'success', options = {}) => {
     const toastMethod = toast[type] || toast.success;
@@ -68,16 +67,16 @@ function Order() {
 
     const storedItems = JSON.parse(localStorage.getItem('count')) || [];
 
-
-    const DELIVERY_PRICE = 40000;
-
-    // Frontendda umumiy narx hisoblanadi
-    const productTotal = storedItems.reduce((acc, item) => {
-      const basePrice = item.product.discount_price;
-      return acc + basePrice * item.quantity;
-    }, 0);
-
-    const totalPrice = productTotal + (deliveryMethod === 'delivery' ? DELIVERY_PRICE : 0);
+    // Faqat to‘liq itemlar qoladi
+    const formattedOrderItems = storedItems
+      .filter(item => item.product && item.color && item.size)
+      .map(item => ({
+        product: item.product.id,
+        color: item.color.id,
+        size: item.size.id,
+        quantity: item.quantity,
+        price: item.product.discount_price
+      }));
 
     if (formattedOrderItems.length === 0) {
       notify("Buyurtma uchun mahsulotlar topilmadi!", "error");
@@ -92,13 +91,7 @@ function Order() {
       "phone": number,
       "country": selectedViloyat,
       "address": address,
-      'order_items': formattedOrderItems.map(item => ({
-        product: item.product.id,
-        color: item.color.id,
-        size: item.size.id,
-        quantity: item.quantity,
-        price: item.product.discount_price // faqat asosiy narx
-      }))
+      "order_items": formattedOrderItems,
     }
     console.log(orderData)
     axiosInstance.post('/order/', orderData, {
@@ -136,8 +129,6 @@ function Order() {
     const count = JSON.parse(localStorage.getItem('count'));
     if (!count || count.length === 0) {
       navigate('/');
-    } else {
-      setOrderItems(count);
     }
   }, [navigate]);
 
@@ -224,18 +215,6 @@ function Order() {
           <textarea value={address} onChange={(e) => { setAddress(e.target.value) }} placeholder="Manzilni kiriting.." className="border-gray-500 dark:bg-[#1D2024] p-2.5 border rounded-md focus:ring-2 focus:ring-[#00C17B] w-full dark:text-gray-300 focus:outline-none placeholder-gray-500" rows="4" ></textarea>
           <p className="mt-1 text-gray-500 text-sm">Siz muhim deb hisoblagan ma'lumotlarni ko'rsating!</p>
         </div>
-      </div>
-      <div className="text-right font-bold text-lg mt-3">
-        Umumiy: {
-          (() => {
-            const productTotal = orderItems.reduce((acc, item) => {
-              const basePrice = item?.product?.discount_price || 0;
-              return acc + basePrice * item.quantity;
-            }, 0);
-            const deliveryFee = deliveryMethod === 'delivery' ? 40000 : 0;
-            return (productTotal + deliveryFee).toLocaleString();
-          })()
-        } so'm
       </div>
       <button type="submit" className='bg-black dark:bg-white mt-4 mb-2 p-2.5 rounded-md w-full font-semibold text-[18px] text-white dark:text-black transition-[0.4s]'>
         Yuborish
