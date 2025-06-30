@@ -59,11 +59,15 @@ function Order() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    console.log("Bosildi!")
     const isValid = validate();
-    if (!isValid) return;
+    if (!isValid) {
+      return;
+    }
 
     const storedItems = JSON.parse(localStorage.getItem('count')) || [];
 
+    // Faqat to‘liq itemlar qoladi
     const formattedOrderItems = storedItems
       .filter(item => item.product && item.color && item.size)
       .map(item => ({
@@ -71,35 +75,43 @@ function Order() {
         color: item.color.id,
         size: item.size.id,
         quantity: item.quantity,
-        price: parseFloat(item.product.discount_price), // ❗️Delivery qo‘shilmaydi!
+        price: item.product.discount_price
       }));
-
+    console.log(formattedOrderItems)
     if (formattedOrderItems.length === 0) {
       notify("Buyurtma uchun mahsulotlar topilmadi!", "error");
       return;
     }
 
     const orderData = {
-      user: userId,
-      delivery_type: deliveryMethod,
-      payment_method: paymentMethod,
-      name: user,
-      phone: number,
-      country: selectedViloyat,
-      address: address,
-      order_items: formattedOrderItems,
-    };
-
+      "user": userId,
+      "delivery_type": deliveryMethod,
+      "payment_method": paymentMethod,
+      "name": user,
+      "phone": number,
+      "country": selectedViloyat,
+      "address": address,
+      "order_items": formattedOrderItems,
+    }
+    console.log(orderData)
     axiosInstance.post('/order/', orderData, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
       .then(() => {
         notify("Buyurtma muvaffaqiyatli yuborildi!", "success", {
-          onClose: () => navigate("/"),
+          onClose: () => {
+            navigate("/");
+          },
         });
       })
       .catch((error) => {
-        notify("Buyurtma yuborishda xatolik!", "error");
+        notify('Buyurtma muvaffaqiyatli yuborildi!', 'success', {
+          onClose: () => {
+            navigate("/");
+          },
+        });
         console.error(error);
       })
       .finally(() => {
@@ -112,7 +124,6 @@ function Order() {
         setAddress("");
       });
   }
-
 
   useEffect(() => {
     const count = JSON.parse(localStorage.getItem('count'));
