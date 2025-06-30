@@ -33,7 +33,7 @@ function Cart() {
     if (!userId) return;
 
     axiosInstance
-      .get(`cart/${7318128389}/`)
+      .get(`cart/${userId}/`)
       .then((response) => {
         const cartItems = response.data;
         localStorage.setItem("count", JSON.stringify(cartItems));
@@ -70,7 +70,7 @@ function Cart() {
   const handleIncrement = (item) => {
     const updatedItem = { ...item, quantity: item.quantity + 1 };
     axiosInstance
-      .put(`/cart/${7318128389}/${item.id}/`, updatedItem)
+      .put(`/cart/${userId}/${item.id}/`, updatedItem)
       .then((res) => {
         dispatch(update(updatedItem));
       })
@@ -81,7 +81,7 @@ function Cart() {
     if (item.quantity <= 1) return;
     const updatedItem = { ...item, quantity: item.quantity - 1 };
     axiosInstance
-      .put(`/cart/${7318128389}/${item.id}/`, updatedItem)
+      .put(`/cart/${userId}/${item.id}/`, updatedItem)
       .then((res) => {
         dispatch(update(updatedItem));
       })
@@ -91,10 +91,10 @@ function Cart() {
   const handleRemove = (item) => {
     setIsDisable(true);
     axiosInstance
-      .delete(`cart/${7318128389}/${item.id}/`)
+      .delete(`cart/${userId}/${item.id}/`)
       .then(() => {
         notify("Mahsulot o‘chirildi");
-        return axiosInstance.get(`cart/${7318128389}/`);
+        return axiosInstance.get(`cart/${userId}/`);
       })
       .then((res) => {
         dispatch(setCart(res.data));
