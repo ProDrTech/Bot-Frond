@@ -81,7 +81,7 @@ function Order() {
           color: item.color.id,
           size: item.size.id,
           quantity: item.quantity,
-          price: basePrice + shippingFee  // har bir itemga narx qo‘shilmoqda
+          price: item.product.discount_price  // har bir itemga narx qo‘shilmoqda
         };
       });
 
