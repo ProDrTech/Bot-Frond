@@ -50,12 +50,12 @@ function Cart() {
         const price = parseFloat(item.product?.discount_price || item.product?.price || 0);
         totalQty += item.quantity;
         totalAmount += item.quantity * price;
+        console.log(item.quantity)
       });
       setTotal(totalQty);
       setTotalPrice(totalAmount);
     }
   }, [cart]);
-
   const notify = (message, type = "success", options = {}) => {
     const toastMethod = toast[type] || toast.success;
     toastMethod(message, {
@@ -72,10 +72,12 @@ function Cart() {
     axiosInstance
       .put(`/cart/${userId}/${item.id}/`, updatedItem)
       .then((res) => {
-        dispatch(update(updatedItem));
+        // API javobida yangilangan element boʻlsa
+        dispatch(update(res.data));
       })
       .catch((err) => console.error(err));
   };
+
 
   const handleDecrement = (item) => {
     if (item.quantity <= 1) return;
@@ -152,7 +154,7 @@ function Cart() {
                     <span className="px-4">{item.quantity}</span>
                     <button onClick={() => handleIncrement(item)} className="bg-gray-300 px-2">+</button>
                   </div>
-                </div>userId
+                </div>
                 <button onClick={() => handleRemove(item)} disabled={isDisable}>
                   <img src={Delete} alt="delete" className="w-6 h-6" />
                 </button>
