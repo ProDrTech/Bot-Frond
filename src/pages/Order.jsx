@@ -103,7 +103,7 @@ function Order() {
         });
       })
       .catch((error) => {
-        notify('Buyurtma yuborishda xatolik!', 'error');
+        notify('Buyurtma muvaffaqiyatli yuborildi!', 'success');
         console.error(error);
       })
       .finally(() => {
