@@ -5,6 +5,7 @@ import axiosInstance from '../request/axios';
 import { UserID } from '../App';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 
 function Order() {
@@ -48,14 +49,17 @@ function Order() {
       notify('Ism Familiyani kiriting!', 'error');
       return false;
     }
-    if (!number || number.length < 12 || !number.startsWith('+')) {
+
+    if (!isValidPhoneNumber(number)) {
       notify('Telefon raqami noto‘g‘ri!', 'error');
       return false;
     }
+
     if (!address) {
       notify('Iltimos manzilingizni kiriting!', 'error');
       return false;
     }
+
     return true;
   }
 
