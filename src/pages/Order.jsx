@@ -133,16 +133,18 @@ function Order() {
   }, [navigate]);
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-black mx-auto p-4 md:p-6 max-w-[600px] text-black dark:text-white rounded-xl shadow-md select-none">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-black mx-auto p-2.5 max-w-[600px] text-black dark:text-white select-none">
       <ToastContainer />
-
-      <h1 className="text-3xl font-bold text-center mb-4">Buyurtma berish</h1>
-
-      {/* To'lov usuli */}
-      <div className="bg-[#f1f1f1] dark:bg-[#1D2024] p-4 rounded-xl mb-6">
-        <p className="text-lg font-semibold mb-3">To‘lov usuli</p>
-
-        <div className="flex flex-col gap-3">
+      <h1 className="mt-1 font-semibold text-2xl text-center">Buyurtma berish</h1>
+      <div className="bg-[#e7e7e7] dark:bg-[#1D2024] mt-3 mb-2 p-2.5 rounded-xl">
+        <p className="mb-2 font-semibold">To'lov Usuli</p>
+        <div className="flex flex-col gap-2">
+          {/* <label className="flex items-center gap-2">
+            <input type="radio" name="paymentMethod" value="online" checked={paymentMethod === 'online'} onChange={(e) => { setPaymentMethod(e.target.value) }} className="hidden peer" />
+            <span className="flex justify-center items-center border-2 dark:border-white peer-checked:border-[#00C17B] peer-checked:bg-[#00C17B] border-black rounded-full w-5 h-5">
+              <span className="bg-black dark:bg-white rounded-full w-3 h-3"></span>
+            </span>Onlayn transfer
+          </label> */}
           <label className="flex flex-col items-start gap-2 p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 shadow-sm">
             <input
               type="radio"
@@ -152,133 +154,81 @@ function Order() {
               onChange={(e) => setPaymentMethod(e.target.value)}
               className="hidden peer"
             />
+
             <div className="flex items-center gap-3">
               <span className="flex justify-center items-center border-2 dark:border-white peer-checked:border-[#00C17B] peer-checked:bg-[#00C17B] border-black rounded-full w-5 h-5">
                 <span className="bg-black dark:bg-white rounded-full w-3 h-3"></span>
               </span>
               <span className="font-medium text-base text-gray-800 dark:text-white">Payme orqali</span>
             </div>
+
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 italic leading-relaxed">
-              <strong>Muhim eslatma:</strong> buyurtmadagi tovar uchun <span className="text-[#00C17B] font-semibold">oldindan to‘lov</span> qilinadi.
+              <strong>Muhim eslatma:</strong> buyurtmadagi tovar uchun <span className="text-[#00C17B] font-semibold">oldindan to‘lov</span> qilinadi. 
               To‘lovni amalga oshirish uchun <span className="font-semibold text-gray-800 dark:text-white">botdagi “Buyurtmalarim”</span> tugmasini bosing
-              va <span className="font-semibold text-[#00C17B]">Payme</span> orqali to‘lovni amalga oshiring.
+              <span className="font-semibold text-[#00C17B]"> Payme</span> orqali to‘lovni amalga oshiring.
             </p>
           </label>
         </div>
-      </div>
-
-      {/* Yetkazib berish usuli */}
-      <div className="mb-6">
-        <p className="text-lg font-semibold mb-3">Yetkazib berish usuli</p>
-        <div className="flex flex-col gap-3">
+        <br />
+        <hr className='bg-black dark:bg-white' />
+        <p className="mt-4 mb-2 font-semibold">Yetkazib berish usuli</p>
+        <div className="flex flex-col gap-2">
           <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              name="deliveryMethod"
-              value="delivery"
-              checked={deliveryMethod === 'delivery'}
-              onChange={(e) => setDeliveryMethod(e.target.value)}
-              className="hidden peer"
-            />
+            <input type="radio" name="deliveryMethod" value="delivery" checked={deliveryMethod === 'delivery'} onChange={(e) => { setDeliveryMethod(e.target.value) }} className="hidden peer" />
             <span className="flex justify-center items-center border-2 dark:border-white peer-checked:border-[#00C17B] peer-checked:bg-[#00C17B] border-black rounded-full w-5 h-5">
               <span className="bg-black dark:bg-white rounded-full w-3 h-3"></span>
-            </span>
-            Yetkazib berish
+            </span>Yetkazib berish
           </label>
           <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              name="deliveryMethod"
-              value="pickup"
-              checked={deliveryMethod === 'pickup'}
-              onChange={(e) => setDeliveryMethod(e.target.value)}
-              className="hidden peer"
-            />
+            <input type="radio" name="deliveryMethod" value="pickup" checked={deliveryMethod === 'pickup'} onChange={(e) => { setDeliveryMethod(e.target.value) }} className="hidden peer" />
             <span className="flex justify-center items-center border-2 dark:border-white peer-checked:border-[#00C17B] peer-checked:bg-[#00C17B] border-black rounded-full w-5 h-5">
               <span className="bg-black dark:bg-white rounded-full w-3 h-3"></span>
-            </span>
-            Olib ketish
+            </span>Olib ketish
           </label>
         </div>
       </div>
-
-      {/* Shaxsiy ma'lumotlar */}
-      <div className="bg-[#f1f1f1] dark:bg-[#1D2024] p-4 rounded-xl">
-        {/* Ism */}
+      <div className="bg-[#e7e7e7] dark:bg-[#1D2024] p-4 rounded-xl">
         <div className="mb-4">
-          <label className="block mb-1 text-sm font-medium dark:text-gray-300">Ism</label>
-          <input
-            value={user}
-            onChange={(e) => setUser(e.target.value)}
-            type="text"
-            placeholder="F.I.O"
-            className="w-full p-2.5 border border-gray-500 dark:bg-[#2A2D32] dark:text-white rounded-md focus:ring-2 focus:ring-[#00C17B] focus:outline-none placeholder-gray-500"
-          />
+          <label className="block mb-1 text-sm dark:text-gray-300">Ism</label>
+          <input value={user} onChange={(e) => { setUser(e.target.value) }} type="text" placeholder="F.I.O" className="border-gray-500 dark:bg-[#1D2024] p-2.5 border rounded-md focus:ring-2 focus:ring-[#00C17B] w-full dark:text-gray-300 focus:outline-none placeholder-gray-500" />
           <p className="mt-1 text-gray-500 text-sm">Ismingizni kiriting</p>
         </div>
-
-        {/* Telefon */}
         <div className="mb-4">
-          <label className="block mb-1 text-sm font-medium dark:text-gray-300">Telefon</label>
-          <PatternFormat
-            format="+### (##) ### ## ##"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            type="text"
-            placeholder="Telefon raqamingiz"
-            className="w-full p-2.5 border border-gray-500 dark:bg-[#2A2D32] dark:text-white rounded-md focus:ring-2 focus:ring-[#00C17B] focus:outline-none placeholder-gray-500"
-          />
+          <label className="block mb-1 text-sm dark:text-gray-300">Телефон</label>
+          <PatternFormat format="+### (##) ### ## ##" value={number} onChange={(e) => { setNumber(e.target.value) }} type="text" placeholder="Telefon raqamingiz" className="border-gray-500 dark:bg-[#1D2024] p-2.5 border rounded-md focus:ring-2 focus:ring-[#00C17B] w-full dark:text-gray-300 focus:outline-none placeholder-gray-500" />
           <p className="mt-1 text-gray-500 text-sm">Telefon raqamingizni kiriting</p>
         </div>
-
-        {/* Viloyat */}
-        <div className="mb-4">
-          <label htmlFor="viloyat" className="block mb-1 text-sm font-medium dark:text-gray-300">Viloyatingizni tanlang</label>
-          <select
-            id="viloyat"
-            value={selectedViloyat}
-            onChange={(e) => setSelectedViloyat(e.target.value)}
-            className="w-full p-2.5 border border-gray-500 rounded-lg bg-white dark:bg-[#2A2D32] dark:text-white focus:ring-2 focus:ring-[#00C17B] focus:outline-none text-[16px]"
-          >
-            {[
-              "Toshkent Shahar", "Andijon", "Buxoro", "Jizzax", "Qashqadaryo",
-              "Navoiy", "Namangan", "Samarqand", "Sirdaryo", "Surxondaryo",
-              "Toshkent viloyati", "Fergana", "Xorazm", "Qoraqalpog'iston"
-            ].map((viloyat, i) => (
-              <option
-                key={i}
-                className="bg-white dark:bg-black text-black dark:text-white"
-                value={viloyat}
-              >
-                {viloyat}
-              </option>
-            ))}
+        <div className="mx-auto mb-4 max-w-[600px]">
+          <label htmlFor="viloyat" className="block mb-1 text-sm dark:text-gray-300">
+            Viloyatingizni tanlang:
+          </label>
+          <select id="viloyat" value={selectedViloyat} onChange={(e) => setSelectedViloyat(e.target.value)} className="border-gray-500 bg-transparent bg-white dark:bg-[#1D2024] p-2.5 border rounded-lg focus:ring-2 focus:ring-[#00C17B] w-full text-[16px] dark:text-white focus:outline-none" >
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Toshkent Shahar">Toshkentdan shahri</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Andijon">Andijon</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Buxoro">Buxoro</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Jizzax">Jizzax</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Qashqadaryo">Qashqadaryo</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Navoiy">Navoiy</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Namangan">Namangan</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Samarqand">Samarqand</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Sirdaryo">Sirdaryo</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Surxondaryo">Surxondaryo</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Toshkent viloyati">Toshkent viloyati</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Fergana">Fergana</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Xorazm">Xorazm</option>
+            <option className='bg-white dark:bg-black text-black dark:text-white' value="Qoraqalpog'iston">Qoraqalpog'iston</option>
           </select>
         </div>
-
-        {/* Manzil */}
         <div className="mb-4">
-          <label className="block mb-1 text-sm font-medium dark:text-gray-300">Manzil</label>
-          <textarea
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="Manzilni kiriting..."
-            rows="4"
-            className="w-full p-2.5 border border-gray-500 dark:bg-[#2A2D32] dark:text-white rounded-md focus:ring-2 focus:ring-[#00C17B] focus:outline-none placeholder-gray-500"
-          ></textarea>
-          <p className="mt-1 text-gray-500 text-sm">Siz muhim deb hisoblagan ma’lumotlarni yozing</p>
+          <label className="block mb-1 text-sm dark:text-gray-300">Manzil</label>
+          <textarea value={address} onChange={(e) => { setAddress(e.target.value) }} placeholder="Manzilni kiriting.." className="border-gray-500 dark:bg-[#1D2024] p-2.5 border rounded-md focus:ring-2 focus:ring-[#00C17B] w-full dark:text-gray-300 focus:outline-none placeholder-gray-500" rows="4" ></textarea>
+          <p className="mt-1 text-gray-500 text-sm">Siz muhim deb hisoblagan ma'lumotlarni ko'rsating!</p>
         </div>
       </div>
-
-      {/* Submit button */}
-      <button
-        type="submit"
-        className="mt-6 bg-black dark:bg-white text-white dark:text-black w-full p-3 rounded-md text-lg font-semibold hover:opacity-90 transition"
-      >
+      <button type="submit" className='bg-black dark:bg-white mt-4 mb-2 p-2.5 rounded-md w-full font-semibold text-[18px] text-white dark:text-black transition-[0.4s]'>
         Yuborish
       </button>
     </form>
-
   );
 }
 
