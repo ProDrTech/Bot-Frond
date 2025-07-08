@@ -170,13 +170,9 @@ function Cart() {
             <span>Buyurtma miqdori:</span>
             <span>{total}</span>
           </div>
-          <div className="flex justify-between">
-            <span>Yetkazib berish:</span>
-            <span className="text-green-500">40,000 UZS</span>
-          </div>
           <div className="flex justify-between font-bold">
             <span>Jami:</span>
-            <span>{Math.trunc(totalPrice + 40000)} UZS</span>
+            <span>{Math.trunc(totalPrice)} UZS</span>
           </div>
           <button onClick={handleClick} className="mt-2 bg-black text-white w-full py-2 rounded">
             Qabul qilaman
