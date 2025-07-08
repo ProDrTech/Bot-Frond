@@ -4,6 +4,9 @@ import { Bounce, ToastContainer, toast } from 'react-toastify';
 import axiosInstance from '../request/axios';
 import { PatternFormat } from 'react-number-format';
 import { UserID } from '../App';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+
 
 function Order() {
   const [paymentMethod, setPaymentMethod] = useState('Naqt pul');
@@ -46,8 +49,8 @@ function Order() {
       notify('Ism Familiyani kiriting!', 'error');
       return false;
     }
-    if (!number) {
-      notify('Telefon raqami kiritilmagan!', 'error');
+    if (!number || number.length < 10 || !number.startsWith('+')) {
+      notify('Telefon raqami noto‘g‘ri!', 'error');
       return false;
     }
     if (!address) {
@@ -56,6 +59,7 @@ function Order() {
     }
     return true;
   }
+
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -79,16 +83,16 @@ function Order() {
       return;
     }
 
-    const orderData = {
-      user: userId, // kerak bo'lsa userId bilan almashtiring
-      delivery_type: deliveryMethod,
-      payment_method: paymentMethod,
-      name: user,
-      phone: number,
-      country: selectedViloyat,
-      address: address,
-      order_items: formattedOrderItems,
-    };
+  const orderData = {
+    user: userId,
+    delivery_type: deliveryMethod,
+    payment_method: paymentMethod,
+    name: user,
+    phone: number, // bu yerga react-phone-input-2 dan kelgan raqam
+    country: selectedViloyat,
+    address: address,
+    order_items: formattedOrderItems,
+  };
 
     axiosInstance.post('/order/', orderData, {
       headers: {
@@ -207,16 +211,32 @@ function Order() {
         {/* Telefon */}
         <div className="mb-4">
           <label className="block mb-1 text-sm font-medium dark:text-gray-300">Telefon</label>
-          <PatternFormat
-            format="+### ## ### ## ##"
+          <PhoneInput
+            country={'uz'}
             value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            type="text"
-            placeholder="Telefon raqamingiz"
-            className="w-full p-2.5 border border-gray-500 dark:bg-[#2A2D32] dark:text-white rounded-md focus:ring-2 focus:ring-[#00C17B] focus:outline-none placeholder-gray-500"
+            onChange={(phone) => setNumber(`+${phone}`)}
+            inputProps={{
+              name: 'phone',
+              required: true,
+              autoFocus: true
+            }}
+            inputStyle={{
+              width: '100%',
+              padding: '10px',
+              borderRadius: '8px',
+              border: '1px solid gray',
+              backgroundColor: theme === 'dark' ? '#2A2D32' : '#fff',
+              color: theme === 'dark' ? '#fff' : '#000'
+            }}
+            containerStyle={{ width: '100%' }}
+            buttonStyle={{
+              borderRight: '1px solid gray',
+              backgroundColor: theme === 'dark' ? '#2A2D32' : '#fff',
+            }}
           />
-          <p className="mt-1 text-gray-500 text-sm">Telefon raqamingizni kiriting</p>
+          <p className="mt-1 text-gray-500 text-sm">Telefon raqamingizni to‘liq kiriting (masalan: +998901234567 yoki +79689128274)</p>
         </div>
+
 
         {/* Viloyat */}
         <div className="mb-4">
