@@ -208,7 +208,7 @@ function Order() {
         <div className="mb-4">
           <label className="block mb-1 text-sm font-medium dark:text-gray-300">Telefon</label>
           <PatternFormat
-            format="+### (##) ### ## ##"
+            format="+### ## ### ## ##"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             type="text"
