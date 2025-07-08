@@ -14,9 +14,6 @@ function Footer() {
                 <a target='_blank' href="https://www.tiktok.com/@asadmaxmud?_r=1&_d=eembgm1371h129&sec_uid=MS4wLjABAAAAlr0imM_SULxMf4WIv4hVDl1D8P7Ua5FAV85aRVv_d_LzPEumvkaPibq2efHCZJMf&share_author_id=7384456153256559622&sharer_language=uz&source=h5_m&u_code=eem4856efg63f4&timestamp=1735553786&user_id=7384456153256559622&sec_user_id=MS4wLjABAAAAlr0imM_SULxMf4WIv4hVDl1D8P7Ua5FAV85aRVv_d_LzPEumvkaPibq2efHCZJMf&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7445146964641433352&share_link_id=a3b5037c-6bcf-4ab7-8f46-7b1ee1f3fb0f&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb0229&social_share_type=5&enable_checksum=1"> <img src={TikTok} className='w-10' /> </a>
                 <a target='_blank' href="https://youtube.com/@asadmaxmud?si=q9gSY1UzFEebH1YE"> <img className='w-10' src={YouTube} /> </a>
             </ul>
-            <p className='font-medium text-[14px]'>Maxfiylik kelishuvi</p>
-            <p className='font-medium text-[14px]'>Foydalanuvchi kelishuvi</p>
-            <p className='mt-2 text-[10px] text-gray-400'>«2025© XK MCHJ «ASADMAXMUD». Barcha huquqlar himoyalangan»</p>
         </footer>
     )
 }
