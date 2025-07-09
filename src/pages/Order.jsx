@@ -14,7 +14,7 @@ function Order() {
   const [user, setUser] = useState('');
   const [number, setNumber] = useState('');
   const [address, setAddress] = useState('');
-  const [selectedViloyat, setSelectedViloyat] = useState('Toshkent Shahar');
+  const [selectedViloyat, setSelectedViloyat] = useState('');
   const { userId, setUserId } = useContext(UserID);
   const navigate = useNavigate();
 
@@ -57,6 +57,11 @@ function Order() {
 
     if (!address) {
       notify('Iltimos manzilingizni kiriting!', 'error');
+      return false;
+    }
+
+    if (!selectedViloyat) {
+      notify('Iltimos viloyatingizni tanlang!', 'error');
       return false;
     }
 
@@ -256,6 +261,9 @@ function Order() {
             onChange={(e) => setSelectedViloyat(e.target.value)}
             className="w-full p-2.5 border border-gray-500 rounded-lg bg-white dark:bg-[#2A2D32] dark:text-white focus:ring-2 focus:ring-[#00C17B] focus:outline-none text-[16px]"
           >
+            <option value="" disabled className="bg-white dark:bg-black text-gray-500 dark:text-gray-400">
+              Viloyat tanlang
+            </option>
             {[
               "Toshkent Shahar", "Andijon", "Buxoro", "Jizzax", "Qashqadaryo",
               "Navoiy", "Namangan", "Samarqand", "Sirdaryo", "Surxondaryo",
