@@ -190,7 +190,7 @@ function ProductDetails() {
           </div>
           <div className="bg-[#e7e7e7] dark:bg-[#1D2024] mx-auto mb-14 p-4 w-full max-h-[300px]">
             <h3 className="mb-2 font-semibold text-lg">
-              Rang: {selectorColor?.[1] || <span className="text-[#fe2c30]">yoq</span>}
+              Rang: {selectorColor?.[1] || <span className="text-[#fe2c30]">TANLANG</span>}
             </h3>
             <div className="flex justify-start space-x-4">
               {data.color?.map((color) => (
@@ -214,7 +214,7 @@ function ProductDetails() {
             </div>
             <div className="mt-6">
               <h3 className="mb-2 font-semibold text-lg">
-                O'lchami: {selectorSize?.[1] ? <span className="uppercase">{selectorSize[1]}</span> : <span className="text-[#fe2c30]">yoq</span>}
+                O'lchami: {selectorSize?.[1] ? <span className="uppercase">{selectorSize[1]}</span> : <span className="text-[#fe2c30]">TANLANG</span>}
               </h3>
               <div className="flex justify-start space-x-2 mb-2">
                 {data.size?.map((size) => (
