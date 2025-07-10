@@ -3,11 +3,22 @@ import axios from 'axios';
 
 function Footer() {
   const [socialLinks, setSocialLinks] = useState([]);
+  const [footerText, setFooterText] = useState('');
 
   useEffect(() => {
+    // Social links olish
     axios.get('https://asadmaxmud.up.railway.app/api/v1/social/')
       .then(res => setSocialLinks(res.data))
       .catch(err => console.error("Ijtimoiy tarmoqlar yuklanmadi", err));
+
+    // Footer matn olish
+    axios.get('https://asadmaxmud.up.railway.app/api/v1/footer/text/')
+      .then(res => {
+        const text = res.data.footer_text;
+        const year = new Date().getFullYear();
+        setFooterText(text.replace('{year}', year));  // Agar `{year}` ishlatilsa
+      })
+      .catch(err => console.error("Footer matni yuklanmadi", err));
   }, []);
 
   return (
@@ -20,6 +31,13 @@ function Footer() {
           </a>
         ))}
       </ul>
+
+      {/* Footer matn */}
+      {footerText && (
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          {footerText}
+        </p>
+      )}
     </footer>
   );
 }
