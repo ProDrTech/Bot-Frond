@@ -131,7 +131,8 @@ function ProductDetails() {
                       className="relative z-50 w-full"
                     >
                       <img
-                        className={`w-full object-contain rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
+                        className={`w-full max-h-[500px] mx-auto transform scale-95 object-contain rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''
+                          }`}
                         src={value.image}
                         alt="Mahsulot rasmi"
                       />
@@ -140,7 +141,8 @@ function ProductDetails() {
                 ) : (
                   <SwiperSlide className="relative z-50 w-full">
                     <img
-                      className={`w-full object-contain rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
+                      className={`w-full max-h-[500px] mx-auto transform scale-60 object-contain rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''
+                        }`}
                       src={data.category.image}
                       alt="Mahsulot rasmi"
                     />
