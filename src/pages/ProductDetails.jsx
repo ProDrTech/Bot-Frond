@@ -125,30 +125,33 @@ function ProductDetails() {
                 className="shadow-md mb-2 detail mySwiper"
               >
                 {
-                  data.product_images.length > 0 ?
+                  data.product_images.length > 0 ? (
                     data.product_images.map((value, idx) => (
                       <SwiperSlide
                         key={idx}
-                        className="relative z-50 rounded-b-lg w-full h-96 object-center"
+                        className="relative z-50 w-full max-h-[400px]"
                       >
                         <img
-                          className={`rounded-b-lg w-full h-96 object-center ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
+                          className={`w-full h-full object-cover rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
                           src={value.image}
                           alt="Mahsulot rasmi"
                         />
                       </SwiperSlide>
-                    )) :
-                    <SwiperSlide className="relative z-50 rounded-b-lg w-full h-96 object-center">
+                    ))
+                  ) : (
+                    <SwiperSlide className="relative z-50 w-full max-h-[400px]">
                       <img
-                        className={`rounded-b-lg w-full h-96 object-center ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
+                        className={`w-full h-full object-cover rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
                         src={data.category.image}
                         alt="Mahsulot rasmi"
                       />
                     </SwiperSlide>
+                  )
                 }
               </Swiper>
+
               <button
-                onClick={() => { navigate(-1) }}
+                onClick={() => navigate(-1)}
                 className="top-2 left-2 z-50 absolute bg-black dark:bg-white p-2 rounded-lg"
               >
                 <img
@@ -157,6 +160,7 @@ function ProductDetails() {
                   alt="Orqaga"
                 />
               </button>
+
               {data.promotion?.map((promo, idx) => (
                 <div
                   key={promo.id || idx}
@@ -167,9 +171,11 @@ function ProductDetails() {
                 </div>
               ))}
             </div>
+
             <div className="p-4">
               <h3 className="mb-2 font-semibold text-[22px]">{data.name}</h3>
               <p className="text-gray-400 text-sm">{data.description}</p>
+
               <div className="flex flex-col items-start bg-[#e7e7e7] dark:bg-[#1D2024] mt-5 mb-4 px-4 py-5 rounded-lg">
                 <span className="font-bold text-[#00C17B] text-2xl">{data.discount_price}</span>
                 <div className="flex justify-start items-center gap-3">
