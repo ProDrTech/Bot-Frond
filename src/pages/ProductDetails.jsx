@@ -128,26 +128,25 @@ function ProductDetails() {
                   data.product_images.map((value, idx) => (
                     <SwiperSlide
                       key={idx}
-                      className="relative z-50 w-full aspect-[4/3]"
+                      className="relative z-50 w-full"
                     >
                       <img
-                        className={`w-full h-full object-cover rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
+                        className={`w-full object-contain rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
                         src={value.image}
                         alt="Mahsulot rasmi"
                       />
                     </SwiperSlide>
                   ))
                 ) : (
-                  <SwiperSlide className="relative z-50 w-full aspect-[4/3]">
+                  <SwiperSlide className="relative z-50 w-full">
                     <img
-                      className={`w-full h-full object-cover rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
+                      className={`w-full object-contain rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
                       src={data.category.image}
                       alt="Mahsulot rasmi"
                     />
                   </SwiperSlide>
                 )}
               </Swiper>
-
               <button
                 onClick={() => navigate(-1)}
                 className="top-2 left-2 z-50 absolute bg-black dark:bg-white p-2 rounded-lg"
