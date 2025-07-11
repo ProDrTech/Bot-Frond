@@ -132,7 +132,7 @@ function Product() {
                     <img
                       src={value.main_image}
                       alt="Product"
-                      className={`w-full h-[115px] object-contain ${isAdult === false && value.age_group === '18+' ? 'blur-[6px]' : ''
+                      className={`w-full h-[99px] object-contain ${isAdult === false && value.age_group === '18+' ? 'blur-[6px]' : ''
                         }`}
                     />
                     <div className="flex flex-col items-start gap-2">
