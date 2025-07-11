@@ -124,30 +124,28 @@ function ProductDetails() {
                 modules={[Autoplay, Pagination, Navigation]}
                 className="shadow-md mb-2 detail mySwiper"
               >
-                {
-                  data.product_images.length > 0 ? (
-                    data.product_images.map((value, idx) => (
-                      <SwiperSlide
-                        key={idx}
-                        className="relative z-50 w-full max-h-[400px]"
-                      >
-                        <img
-                          className={`w-full h-full object-cover rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
-                          src={value.image}
-                          alt="Mahsulot rasmi"
-                        />
-                      </SwiperSlide>
-                    ))
-                  ) : (
-                    <SwiperSlide className="relative z-50 w-full max-h-[400px]">
+                {data.product_images.length > 0 ? (
+                  data.product_images.map((value, idx) => (
+                    <SwiperSlide
+                      key={idx}
+                      className="relative z-50 w-full aspect-[4/3]"
+                    >
                       <img
                         className={`w-full h-full object-cover rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
-                        src={data.category.image}
+                        src={value.image}
                         alt="Mahsulot rasmi"
                       />
                     </SwiperSlide>
-                  )
-                }
+                  ))
+                ) : (
+                  <SwiperSlide className="relative z-50 w-full aspect-[4/3]">
+                    <img
+                      className={`w-full h-full object-cover rounded-b-lg ${isAdult === false && data.age_group === '18+' ? 'blur-[6px]' : ''}`}
+                      src={data.category.image}
+                      alt="Mahsulot rasmi"
+                    />
+                  </SwiperSlide>
+                )}
               </Swiper>
 
               <button
@@ -172,6 +170,7 @@ function ProductDetails() {
               ))}
             </div>
 
+            {/* Mahsulot tavsifi */}
             <div className="p-4">
               <h3 className="mb-2 font-semibold text-[22px]">{data.name}</h3>
               <p className="text-gray-400 text-sm">{data.description}</p>
